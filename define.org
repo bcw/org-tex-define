@@ -93,8 +93,9 @@ At the beginning of the file, you should add
 : #+SETUPFILE: define.setup
 and then you can write
 : {{{define(\\mat,[1]{\\mathbf{#1}})}}}
-and use it as follows:
-: $\mat{A}$
+Again, remember: it is necessary to double the backslashes.  
 
-Again, remember: it is necessary to double the backslashes.  And the
-result looks like this: $\mat{A}$.
+After that is done, you can use the macro as follows:
+: $\mat{A}$
+Note that the backslash here is /not/ doubled, because this is LaTeX,
+not our Org mode macro.  The result looks like this: $\mat{A}$.

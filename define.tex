@@ -1,4 +1,4 @@
-% Created 2016-08-21 Sun 20:36
+% Created 2016-08-21 Sun 21:06
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -119,12 +119,13 @@ and then you can write
 \begin{verbatim}
 {{{define(\\mat,[1]{\\mathbf{#1}})}}}
 \end{verbatim}
-and use it as follows:
+Again, remember: it is necessary to double the backslashes.  
+
+After that is done, you can use the macro as follows:
 \begin{verbatim}
 $\mat{A}$
 \end{verbatim}
-
-Again, remember: it is necessary to double the backslashes.  And the
-result looks like this: $\mat{A}$.
+Note that the backslash here is \emph{not} doubled, because this is \LaTeX{},
+not our Org mode macro.  The result looks like this: $\mat{A}$.
 % Emacs 24.5.1 (Org mode 8.2.10)
 \end{document}
