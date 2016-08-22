@@ -1,0 +1,100 @@
+#+TITLE: Org mode LaTeX macros (for both HTML and LaTeX export)
+#+SETUPFILE: define.setup
+#+OPTIONS: num:nil
+#+BEGIN_COMMENT
+These ~#+LATEX_HEADER:~ lines reduce the code font size so that it
+fits on the paper (although it still looks bad, unfortunately). BUT it
+only works properly if the `listings' package is NOT being used; see
+<http://emacs.stackexchange.com/a/23922> for details.
+#+END_COMMENT
+#+LATEX_HEADER: \RequirePackage{fancyvrb}
+#+LATEX_HEADER: \DefineVerbatimEnvironment{verbatim}{Verbatim}{fontsize=\scriptsize}
+
+# for the usage example below
+{{{define(\\mat,[1]{\\mathbf{#1}})}}}
+
+This document should be exported to [[file:define.html][HTML]] and [[file:define.tex][LaTeX]] to check that the
+proper code is generated.  [[file:define.pdf][A PDF file]] should also be available, but
+looks a bit bad because Org mode macros /must/ be written on a single
+line, and some of these macros overfill the line (even in a fairly
+small font).
+
+This Literate Program is an Org mode setup file that makes it easy to
+define LaTeX macros that work in /both/ LaTeX and HTML export.  To
+"tangle" the source code (~define.org~) for this document to generate
+the ~define.setup~ file, type the key sequence ~C-c C-v t~ in Emacs
+(with the default keymap).  The first line makes sure that the file
+can be edited in org-mode despite the file being named with an
+extension of ~.setup~.
+
+#+BEGIN_SRC org :tangle define.setup :noweb yes
+# -*- mode: org -*-
+<<define macros>>
+#+END_SRC
+
+* Define the Org mode macros
+  :PROPERTIES:
+  :noweb-ref: define macros
+  :END:
+
+** when-fmt macro
+
+This is inspired by the ~if-latex-else~ macro under the `Advanced'
+heading here: <https://github.com/fniessen/org-macros>. Apparently,
+Org mode will evalute Emacs Lisp code in macros, although I have not
+yet found any documentation that explains /why/ this works.
+
+The ~when~ form is like ~if~, except it only returns a string when the
+condition is true, returning ~nil~ instead when it is false.  We use
+~when~ because we want to perform an action for LaTeX and HTML
+formats, and we do not want to assume that the user wants the same
+behavior for all non-LaTeX or non-HTML formats.
+
+#+BEGIN_SRC org
+#+MACRO: when-fmt (eval (when (org-export-derived-backend-p org-export-current-backend '$1) "$2"))
+#+END_SRC
+
+Since the second parameter ~$2~ is used inside quotes, it will be
+necessary to double any backslashes, despite the fact that Org mode
+macros do not normally require this (except between parameters).
+
+** preamble macro
+
+Using the [[when-fmt macro]], we wrap HTML output in ~\(...\)~ so that [[http://docs.mathjax.org/en/latest/tex.html#defining-tex-macros][the
+MathJax library will recognize that it should process them]].  So long
+as we only use this to define LaTeX macros, MathJax will not generate
+any spurious output.  In LaTeX output, we use the ~#+LATEX_HEADER:~
+Org mode syntax to ensure that it is put in the proper LaTeX preamble.
+
+#+BEGIN_SRC org
+#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,#+LATEX_HEADER: $1)}}}
+#+END_SRC
+
+** define macro
+
+Using the [[preamble macro]], we specify a macro that uses the LaTeX
+~\newcommand~ macro to define macros.  The first argument is the macro
+command sequence, and the second argument is whatever LaTeX code is
+needed for the definition.  Note that we wrap the command sequence in
+~{...}~ automatically, since this is always done.  The second
+parameter is not, however, because it is sometimes necessary to write
+a number in square brackets ~[...]~ when the macro takes parameters.
+
+#+BEGIN_SRC org
+#+MACRO: define   {{{preamble(\\newcommand{$1}$2)}}}
+#+END_SRC
+
+* Usage Example
+
+Say you want to define a ~\mat~ command to write the names of
+matrices, as in ~\mat{A}~ for $\mat{A}$.
+
+At the beginning of the file, you should add
+: #+SETUPFILE: define.setup
+and then you can write
+: {{{define(\\mat,[1]{\\mathbf{#1}})}}}
+and use it as follows:
+: $\mat{A}$
+
+Again, remember: it is necessary to double the backslashes.  And the
+result looks like this: $\mat{A}$.
