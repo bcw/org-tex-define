@@ -1,0 +1,13 @@
+#+TITLE: Software: org-tex-define -- bcwells.net
+#+INCLUDE: blurb.org
+
+The program is available in two formats meant for reading:
+
+- [[file:define.html][HTML format]]
+- [[file:define.pdf][PDF format]]
+
+The source code for the program is also available, either as [[http://www.bcwells.net/software/org-tex-define/define.org][a
+downloadable Org mode file]] or as [[https://github.com/bcw/org-tex-define][a GitHub repository]], which also
+includes the generated HTML, LaTeX, and PDF files for comparison.  The
+[[file:README.org][README file]] includes brief usage instructions and information about
+how you can contribute (if you wish).
