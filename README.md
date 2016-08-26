@@ -5,7 +5,8 @@
 <li><a href="#sec-1">1. Org mode setup file to make (La)TeX definitions work</a>
 <ul>
 <li><a href="#sec-1-1">1.1. Usage</a></li>
-<li><a href="#sec-1-2">1.2. License</a></li>
+<li><a href="#sec-1-2">1.2. Contributing</a></li>
+<li><a href="#sec-1-3">1.3. License</a></li>
 </ul>
 </li>
 </ul>
@@ -47,8 +48,23 @@ end* of the command (instead of between the first and second mandatory
 parameters, as in LaTeX).  I did this because it's much easier to make
 an Org mode macro parameter optional at the end than elsewhere.
 
-There are some usage examples at the end of the program itself.
+There are some simple usage examples at the end of the program itself,
+and the <examples/> directory currently contains one extended
+example:
 
-## License<a id="sec-1-2" name="sec-1-2"></a>
+-   An explanation of how [rotation matrices](examples/rotation.md) can be derived by purely
+    algebraic methods.
+
+## Contributing<a id="sec-1-2" name="sec-1-2"></a>
+
+If you have some good examples &#x2014; either simple or extended, but in
+any case relatively short (use the existing examples as a guide for
+what I mean) &#x2014; you'd like to add, pull requests are welcome!  I
+would particularly like to some simple demos of the macros which do
+not yet have any.  (They are marked with the TODO tag in the Org mode
+source.  If you write one, I would prefer you simply remove the TODO
+tag rather than marking it DONE.)
+
+## License<a id="sec-1-3" name="sec-1-3"></a>
 
 This program is licensed under the GNU GPLv3+.

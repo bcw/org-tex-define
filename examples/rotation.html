@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Derivation of the 2-D Rotation Matrix</title>
+<!-- 2016-08-25 Thu 23:58 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Brian C. Wells" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Derivation of the 2-D Rotation Matrix</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">Introduction</a></li>
+<li><a href="#sec-2">Derivation</a></li>
+<li><a href="#sec-3">Appendix</a></li>
+</ul>
+</div>
+</div>
+<p>
+\(\newcommand{\mat}[1]{\mathbf{#1}}\)
+\(\renewcommand{\vec}[1]{\mathbf{#1}}\)
+\(\newcommand{\e}[1]{\mathbf{e}_{#1}}\)
+</p>
+
+<p>
+This document is an extended example for using <a href="../define.html">this literate program</a>.
+It should be available in both HTML and PDF versions, as well as the
+Org mode source code.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+There are many articles on the Internet (including the <a href="https://en.wikipedia.org/wiki/Rotation_matrix">rotation matrix
+article on Wikipedia</a>) which <i>state</i> that the transformation matrix for
+a 2-dimensional rotation through an angle \(\theta\) can be expressed as
+</p>
+\begin{equation*}
+\begin{bmatrix}
+\cos\theta & -\sin\theta \\
+\sin\theta & \cos\theta
+\end{bmatrix},
+\end{equation*}
+<p>
+but few I am aware of show exactly how this matrix can be derived <i>by
+purely algebraic methods</i>.  It is easy to show that this follows from
+the standard 2-D rotation transformation (we do that also here), but
+that is not very helpful for a student who has not seen how that
+transformation itself can be derived.  There are websites that try to
+show why it is true visually, but that is not mathematically rigorous
+and is again unhelpful for students who have difficulty with
+visualization (or who have serious sight impairments).
+</p>
+
+<p>
+After I wrote the original version of this article, I found <a href="http://www.sunshine2k.de/articles/RotationDerivation.pdf">another
+article</a> that explains rotations in basically the same way I did.  I
+have incorporated its use of \(\alpha\) and \(\beta\) for the angles;
+originally, I used different variables.  However, it does not explain
+how it goes from transformation to matrix, substitutes diagrams for
+formal notation and descriptions, and shows more intermediate steps
+than someone who has a good grasp of basic algebra and trigonometry
+needs.  And it references Wikipedia for the trigonometric identities,
+not even attempting to prove them.  So the present document is (for
+better or worse) a little more formal, self-contained, and less
+reliant on visual presentations.  It is also available in both HTML
+and PDF formats, unlike the other article (PDF only).
+</p>
+
+<p>
+Supposing only knowledge of high school algebra and trigonometry, and
+some basic facts about vectors and matrices such as <a href="https://en.wikipedia.org/wiki/Matrix_multiplication">matrix
+multiplication</a>, the 2-D rotation transformation (and its corresponding
+matrix) can be derived algebraically.  A little knowledge of linear
+algebra, particularly how to derive transformation matrices from
+linear transformations, would also be helpful.  But I try to leave no
+doubt that the derivation is correct (though a bit mysterious) even
+for those who know nothing about that subject.
+</p>
+
+<p>
+The derivation makes use of two trigonometric identities, which
+readers are assumed to have seen (and subsequently forgotten).  In the
+interest of completeness<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>, a proof for these identities&#x2014;making
+use of <a href="https://en.wikipedia.org/wiki/Euler%2527s_formula">Euler's formula</a>&#x2014;is provided; but since this is not
+particularly relevant to the main result, and some readers may be
+sufficiently familiar with this derivation that they do not wish to
+see it again, it has been deferred to an <a href="#sec-3">Appendix</a> (with another link
+at the place where the identities are used).
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Derivation</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Suppose we have a vector \(\vec{p} = \langle x, y \rangle = x\e{1} +
+y\e{2}\), where \(\e{1} = \langle 1, 0 \rangle\) and \(\e{2} = \langle 0,
+1 \rangle\) are the standard basis vectors.  The Cartesian \(x\) and \(y\)
+coordinates can be rewritten as <b>polar coordinates</b> thus:
+</p>
+\begin{align*}
+x &= r \cos \alpha \\
+y &= r \sin \alpha\tag{1}
+\end{align*}
+<p>
+for some radius \(r\) and angle \(\alpha\) (not necessarily positive nor
+unique), measured counterclockwise from the positive \(x\)-axis.
+</p>
+
+<p>
+We want to rotate it through an angle \(\beta\) (counterclockwise if
+\(\beta > 0\)).  Since a rotation does not change the radius, but only
+adds to the angle, the final vector will be \(\vec{p'} = \langle x', y'
+\rangle\) such that
+</p>
+\begin{align*}
+x' &= r \cos(\alpha + \beta) \\
+y' &= r \sin(\alpha + \beta)\tag{2}.
+\end{align*}
+<p>
+We are looking for a \(2\times{}2\) matrix \(\mat{A}\) such that
+</p>
+\begin{equation*}
+\vec{p'} = \mat{A}\vec{p}\tag{3},
+\end{equation*}
+<p>
+when both \(\vec{p}\) and \(\vec{p'}\) are expressed in column form.
+Using the identities
+</p>
+\begin{align*}
+\cos(\alpha + \beta) &= \cos\alpha \cos\beta - \sin\alpha \sin\beta \\
+\sin(\alpha + \beta) &= \sin\alpha \cos\beta + \cos\alpha \sin\beta,
+\end{align*}
+<p>
+which we derive from Euler's formula in the <a href="#sec-3">Appendix</a> below, we combine
+with the equations in \((2)\) to get
+</p>
+\begin{align*}
+x' &= r \cos\alpha \cos\beta - r \sin\alpha \sin\beta \\
+y' &= r \sin\alpha \cos\beta + r \cos\alpha \sin\beta.
+\end{align*}
+<p>
+Substituting \(x\) and \(y\) for their equivalents from \((1)\), and
+rearranging to put always \(x\) before \(y\), we find that the correct 2-D
+rotation transformation is
+</p>
+\begin{align*}
+x' &= x \cos\beta - y \sin\beta \\
+y' &= x \sin\beta + y \cos\beta\tag{4}.
+\end{align*}
+
+<p>
+To put this transformation into matrix form, we need apply it to the
+standard basis vectors, then label these transformed standard basis
+vectors as the columns of matrix \(\mat{A}\).  For \(\e{1}\) we get
+</p>
+\begin{align*}
+x' &= 1 \cos\beta - 0 \sin\beta = \cos\beta \\
+y' &= 1 \sin\beta + 0 \cos\beta = \sin\beta,
+\end{align*}
+<p>
+and for \(\e{2}\)
+</p>
+\begin{align*}
+x' &= 0 \cos\beta - 1 \sin\beta = -\sin\beta \\
+y' &= 0 \sin\beta + 1 \cos\beta = \cos\beta.
+\end{align*}
+<p>
+Labeling these results as columns of \(\mat{A}\),
+</p>
+\begin{align*}
+\mat{A} = \begin{bmatrix}
+\cos\beta & -\sin\beta \\
+\sin\beta & \cos\beta
+\end{bmatrix}.
+\end{align*}
+
+<p>
+To verify this as an appropriate way to construct \(\mat{A}\), we
+substitute this matrix and the general vector \(\vec{p}\) (in column
+form) into the right-hand side of \((3)\), then carry out the matrix
+multiplication:
+</p>
+\begin{equation*}
+\begin{bmatrix}
+\cos\beta & -\sin\beta \\
+\sin\beta & \cos\beta
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix} =
+\begin{bmatrix}
+x \cos\beta - y \sin\beta \\
+x \sin\beta + y \cos\beta
+\end{bmatrix}.
+\end{equation*}
+
+<p>
+This matches our previous results in \((4)\), so we know that this
+matrix \(\mat{A}\) is a correct representation of the 2-D rotation
+transformation. QED
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Appendix</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Euler's formula tells us that \(e^{i\theta} = \cos\theta +
+i\sin\theta\), where \(i = \sqrt{-1}\) is the unit of imaginary numbers.
+Applying it to \(\theta = \alpha + \beta\), we obtain
+</p>
+\begin{equation*}
+e^{i(\alpha + \beta)} = \cos(\alpha + \beta) + i\sin(\alpha + \beta).
+\end{equation*}
+<p>
+But since \(e^{i(\alpha + \beta)} = e^{i\alpha} e^{i\beta}\), we also see that
+</p>
+\begin{align*}
+e^{i(\alpha + \beta)} &= (\cos\alpha + i\sin\alpha)(\cos\beta + i\sin\beta) \\
+                      &= (\cos\alpha \cos\beta - \sin\alpha \sin\beta) +
+                         i(\sin\alpha \cos\beta + \cos\alpha \sin\beta).
+\end{align*}
+<p>
+Equating the real and imaginary components of these two expressions
+for \(e^{i(\alpha + \beta)}\), we obtain the trigonometric identities
+</p>
+\begin{align*}
+\cos(\alpha + \beta) &= \cos\alpha \cos\beta - \sin\alpha \sin\beta \\
+\sin(\alpha + \beta) &= \sin\alpha \cos\beta + \cos\alpha \sin\beta,
+\end{align*}
+<p>
+as desired.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+Not to mention the fact that I have some difficulty remembering
+the identities myself!
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Brian C. Wells</p>
+<p class="date">Created: 2016-08-25 Thu 23:58</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

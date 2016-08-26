@@ -26,7 +26,22 @@ end/ of the command (instead of between the first and second mandatory
 parameters, as in LaTeX).  I did this because it's much easier to make
 an Org mode macro parameter optional at the end than elsewhere.
 
-There are some usage examples at the end of the program itself.
+There are some simple usage examples at the end of the program itself,
+and the [[file:examples/]] directory currently contains one extended
+example:
+
+- An explanation of how [[file:examples/rotation.org][rotation matrices]] can be derived by purely
+  algebraic methods.
+
+** Contributing
+
+If you have some good examples --- either simple or extended, but in
+any case relatively short (use the existing examples as a guide for
+what I mean) --- you'd like to add, pull requests are welcome!  I
+would particularly like to some simple demos of the macros which do
+not yet have any.  (They are marked with the TODO tag in the Org mode
+source.  If you write one, I would prefer you simply remove the TODO
+tag rather than marking it DONE.)
 
 ** License
 
