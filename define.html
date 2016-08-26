@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Org mode LaTeX macros (for both HTML and LaTeX export)</title>
+<!-- 2016-08-25 Thu 19:26 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Brian C. Wells" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Org mode LaTeX macros (for both HTML and LaTeX export)</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Preliminary Macros</a>
+<ul>
+<li><a href="#sec-1-1">1.1. when-fmt</a></li>
+<li><a href="#sec-1-2">1.2. preamble</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Definition Macros</a>
+<ul>
+<li><a href="#sec-2-1">2.1. def</a></li>
+<li><a href="#sec-2-2">2.2. newcommand</a></li>
+<li><a href="#sec-2-3">2.3. renewcommand</a></li>
+<li><a href="#sec-2-4">2.4. newenvironment</a></li>
+<li><a href="#sec-2-5">2.5. renewenvironment</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Installation</a></li>
+<li><a href="#sec-4">4. Usage Examples</a>
+<ul>
+<li><a href="#sec-4-1">4.1. <span class="todo TODO">TODO</span> def</a></li>
+<li><a href="#sec-4-2">4.2. newcommand (without parameters)</a></li>
+<li><a href="#sec-4-3">4.3. newcommand (with a parameter)</a></li>
+<li><a href="#sec-4-4">4.4. <span class="todo TODO">TODO</span> renewcommand</a></li>
+<li><a href="#sec-4-5">4.5. <span class="todo TODO">TODO</span> newenvironment</a></li>
+<li><a href="#sec-4-6">4.6. <span class="todo TODO">TODO</span> renewenvironment</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+This document should be exported to HTML and LaTeX to check that the
+proper code is generated.  A PDF file should also be available, but
+looks a bit bad because Org mode macros <i>must</i> be written on a single
+line, and some of these macros overfill the line (even in a fairly
+small font).
+</p>
+
+<p>
+This Literate Program is an Org mode setup file that makes it easy to
+define LaTeX macros that work in <i>both</i> LaTeX and HTML export.  To
+"tangle" the Org mode source code for this document to generate the
+<code>define.setup</code> file, type the key sequence <code>C-c C-v t</code> in Emacs (with
+the default keymap).  The first line makes sure that the file can be
+edited in org-mode despite the file being named with an extension of
+<code>.setup</code>.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org"># -*- mode: org -*-
+#+MACRO: when-fmt (eval (when (org-export-derived-backend-p org-export-current-backend '$1) "$2"))
+#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,\n#+LATEX_HEADER: $1\n)}}}
+#+MACRO: def {{{preamble(\\def$1{$2})}}}
+#+MACRO: newcommand {{{preamble(\\newcommand{$1}$3{$2})}}}
+#+MACRO: renewcommand {{{preamble(\\renewcommand{$1}$3{$2})}}}
+#+MACRO: newenvironment {{{preamble(\\newenvironment{$1}$4{$2}{$3})}}}
+#+MACRO: renewenvironment {{{preamble(\\renewenvironment{$1}$4{$2}{$3})}}}
+</pre>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Preliminary Macros</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> when-fmt</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+This is inspired by the <code>if-latex-else</code> macro under the `Advanced'
+heading here: <a href="https://github.com/fniessen/org-macros">https://github.com/fniessen/org-macros</a>. Apparently,
+Org mode will evalute Emacs Lisp code in macros, although I have not
+yet found any documentation that explains <i>why</i> this works.
+</p>
+
+<p>
+The <code>when</code> form is like <code>if</code>, except it only returns a string when the
+condition is true, returning <code>nil</code> instead when it is false.  We use
+<code>when</code> because we want to perform an action for LaTeX and HTML
+formats, and we do not want to assume that the user wants the same
+behavior for all non-LaTeX or non-HTML formats.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+MACRO: when-fmt (eval (when (org-export-derived-backend-p org-export-current-backend '$1) "$2"))
+</pre>
+</div>
+
+<p>
+Since the parameter <code>$2</code> is inside quotes, it will be necessary to
+double any (literal) backslashes, despite the fact that Org mode
+macros do not normally require this (except between parameters).
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> preamble</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Using the <a href="#sec-1-1">1.1</a> macro, we wrap HTML output in <code>\(...\)</code> so that <a href="http://docs.mathjax.org/en/latest/tex.html#defining-tex-macros">the
+MathJax library will recognize that it should process them</a>.  So long
+as we only use this to define LaTeX macros, MathJax will not generate
+any spurious output.  In LaTeX output, we use the <code>#+LATEX_HEADER:</code>
+Org mode syntax to ensure that it is put in the proper LaTeX preamble.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,\n#+LATEX_HEADER: $1\n)}}}
+</pre>
+</div>
+
+<p>
+Note: the <code>\n</code> before <code>#+LATEX_HEADER:</code> and after the parameter <code>$1</code>
+are an <i>attempt</i> to ensure that the command starts and ends with a new
+line, so that Org mode commands are recognized correctly.  This is not
+bulletproof: if you put a newline <i>inside</i> the command, that may still
+foul things up.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Definition Macros</h2>
+<div class="outline-text-2" id="text-2">
+
+<p>
+Using the <a href="#sec-1-2">1.2</a> macro, we specify macros that use the TeX and LaTeX
+macros to define macros.  Once again, due to the use of an Emacs Lisp
+string, it is necessary to double any literal backslashes provided to
+these macros, as explained for the <a href="#sec-1-1">1.1</a> macro.
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> def</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The plain TeX command, which allows you to (re)define anything that
+(MathJax's implementation of) TeX can handle, including LaTeX.  This
+flexibility comes at the price of no warnings when you attempt to
+define something new and it redefines something essential.  The first
+argument is the control sequence to define, which may begin with a
+backslash (escaped: <code>\\</code>), but must not contain curly brackets
+(<code>{...}</code>); the second argument is what it should expand to,
+automatically enclosed in curly brackets.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+MACRO: def {{{preamble(\\def$1{$2})}}}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> newcommand</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+The standard LaTeX command for defining a macro, which <i>must not</i>
+already exist.  The first argument is the command name, which is
+automatically enclosed in brackets.  The second argument is what it
+should expand to, which is also automatically enclosed in brackets.
+The third argument, if any, is inserted <i>as is</i> between the first and
+second argument; this lets you give a parameter count, or a parameter
+count <i>and</i> a default value for the first parameter, each in square
+brackets (<code>[...]</code>).
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+MACRO: newcommand {{{preamble(\\newcommand{$1}$3{$2})}}}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> renewcommand</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+The LaTeX command for redefining an existing macro, which <i>must</i>
+already exist.  The arguments are the same as for the <a href="#sec-2-2">2.2</a>
+macro.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+MACRO: renewcommand {{{preamble(\\renewcommand{$1}$3{$2})}}}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> newenvironment</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+The LaTeX command for defining a new environment, which <i>must not</i>
+already exist.  The first, second, and third arguments are enclosed in
+curly brackets in that order.  The fourth argument, if any, is
+inserted (as is) between the first and second arguments, like the
+third argument for the <a href="#sec-2-2">2.2</a> macro.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+MACRO: newenvironment {{{preamble(\\newenvironment{$1}$4{$2}{$3})}}}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> renewenvironment</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+The LaTeX command for redefining an existing environment, which <i>must</i>
+already exist.  The arguments are the same as for the <a href="#sec-2-4">2.4</a>
+macro.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+MACRO: renewenvironment {{{preamble(\\renewenvironment{$1}$4{$2}{$3})}}}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Installation</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+To use this setup file, you only need to "tangle" this document from
+within Emacs (press <code>C-c C-v t</code> in the default keymap), drop it into
+the same directory as your Org mode document(s), and load it with
+</p>
+<pre class="example">
+#+SETUPFILE: define.setup
+</pre>
+<p>
+near the beginning of each file.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Usage Examples</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> <span class="todo TODO">TODO</span> def</h3>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> newcommand (without parameters)</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+\(\newcommand{\myvqeqn}{y = 2(x-1)^2+1}\)
+</p>
+
+<p>
+Say you are writing a book on Intermediate Algebra, and introducing
+the vertex form of quadratic equations.  And you find yourself
+referring to the equation \[\myvqeqn\] a lot, so you would like to
+abbreviate it.  Easy!  Anywhere (almost) <i>before</i> your first usage &#x2014;
+we do it right before this text, to help keep it consistent with the
+example text and explanation here &#x2014; just type
+</p>
+<pre class="example">
+{{{newcommand(\\myvqeqn,y = 2(x-1)^2+1)}}}
+</pre>
+<p>
+and use it like so:
+</p>
+<pre class="example">
+The equation $\myvqeqn$ shows ...
+</pre>
+<p>
+It will look like "The equation \(\myvqeqn\) shows &#x2026;", in both HTML
+and LaTeX, the latter thanks to the use of <code>#+LATEX_HEADER:</code> in the
+<a href="#sec-1-2">1.2</a> macro.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> newcommand (with a parameter)</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+\(\newcommand{\mat}[1]{\mathbf{#1}}\)
+</p>
+
+<p>
+Say you are writing a book on Linear Algebra.  You will certainly be
+writing a lot about the names of certain matrices, and you will
+probably want to abbreviate the names of (at least) the most common
+matrices you talk about.  For two reasons, you will want to use a
+parameter for the matrix name:
+</p>
+
+<ol class="org-ol">
+<li>you may be writing about several matrices, and it would be a waste
+of effort to write a separate command for each one;
+</li>
+<li>you want to ensure that your typographical treatment of the various
+matrices is consistent, even if you change your mind later.
+</li>
+</ol>
+
+<p>
+So, you might define a command like this:
+</p>
+<pre class="example">
+{{{newcommand(\\mat,\\mathbf{#1},[1])}}}
+</pre>
+<p>
+and use it like this:
+</p>
+<pre class="example">
+The matrices $\mat{A}$ and $\mat{B}$ represent ...
+</pre>
+
+<p>
+Now, the result looks like "The matrices \(\mat{A}\) and \(\mat{B}\)
+represent &#x2026;", but if you want to change how it looks later, there is
+only one definition that needs to be changed.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-4" class="outline-3">
+<h3 id="sec-4-4"><span class="section-number-3">4.4</span> <span class="todo TODO">TODO</span> renewcommand</h3>
+</div>
+
+<div id="outline-container-sec-4-5" class="outline-3">
+<h3 id="sec-4-5"><span class="section-number-3">4.5</span> <span class="todo TODO">TODO</span> newenvironment</h3>
+</div>
+
+<div id="outline-container-sec-4-6" class="outline-3">
+<h3 id="sec-4-6"><span class="section-number-3">4.6</span> <span class="todo TODO">TODO</span> renewenvironment</h3>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Brian C. Wells</p>
+<p class="date">Created: 2016-08-25 Thu 19:26</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

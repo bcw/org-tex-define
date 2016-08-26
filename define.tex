@@ -1,0 +1,256 @@
+% Created 2016-08-25 Thu 19:27
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\RequirePackage{fancyvrb}
+\DefineVerbatimEnvironment{verbatim}{Verbatim}{fontsize=\scriptsize}
+\newcommand{\myvqeqn}{y = 2(x-1)^2+1}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\author{Brian C. Wells}
+\date{\today}
+\title{Org mode \LaTeX{} macros (for both HTML and \LaTeX{} export)}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs 24.5.1 (Org mode 8.2.10)}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+This document should be exported to HTML and \LaTeX{} to check that the
+proper code is generated.  A PDF file should also be available, but
+looks a bit bad because Org mode macros \emph{must} be written on a single
+line, and some of these macros overfill the line (even in a fairly
+small font).
+
+This Literate Program is an Org mode setup file that makes it easy to
+define \LaTeX{} macros that work in \emph{both} \LaTeX{} and HTML export.  To
+"tangle" the Org mode source code for this document to generate the
+\verb~define.setup~ file, type the key sequence \verb~C-c C-v t~ in Emacs (with
+the default keymap).  The first line makes sure that the file can be
+edited in org-mode despite the file being named with an extension of
+\verb~.setup~.
+
+\begin{verbatim}
+# -*- mode: org -*-
+#+MACRO: when-fmt (eval (when (org-export-derived-backend-p org-export-current-backend '$1) "$2"))
+#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,\n#+LATEX_HEADER: $1\n)}}}
+#+MACRO: def {{{preamble(\\def$1{$2})}}}
+#+MACRO: newcommand {{{preamble(\\newcommand{$1}$3{$2})}}}
+#+MACRO: renewcommand {{{preamble(\\renewcommand{$1}$3{$2})}}}
+#+MACRO: newenvironment {{{preamble(\\newenvironment{$1}$4{$2}{$3})}}}
+#+MACRO: renewenvironment {{{preamble(\\renewenvironment{$1}$4{$2}{$3})}}}
+\end{verbatim}
+
+\section{Preliminary Macros}
+\label{sec-1}
+
+\subsection{when-fmt}
+\label{sec-1-1}
+
+This is inspired by the \verb~if-latex-else~ macro under the `Advanced'
+heading here: \url{https://github.com/fniessen/org-macros}. Apparently,
+Org mode will evalute Emacs Lisp code in macros, although I have not
+yet found any documentation that explains \emph{why} this works.
+
+The \verb~when~ form is like \verb~if~, except it only returns a string when the
+condition is true, returning \verb~nil~ instead when it is false.  We use
+\verb~when~ because we want to perform an action for \LaTeX{} and HTML
+formats, and we do not want to assume that the user wants the same
+behavior for all non-\LaTeX{} or non-HTML formats.
+
+\begin{verbatim}
+#+MACRO: when-fmt (eval (when (org-export-derived-backend-p org-export-current-backend '$1) "$2"))
+\end{verbatim}
+
+Since the parameter \verb~$2~ is inside quotes, it will be necessary to
+double any (literal) backslashes, despite the fact that Org mode
+macros do not normally require this (except between parameters).
+
+\subsection{preamble}
+\label{sec-1-2}
+
+Using the \ref{sec-1-1} macro, we wrap HTML output in \verb~\(...\)~ so that \href{http://docs.mathjax.org/en/latest/tex.html#defining-tex-macros}{the
+MathJax library will recognize that it should process them}.  So long
+as we only use this to define \LaTeX{} macros, MathJax will not generate
+any spurious output.  In \LaTeX{} output, we use the \verb~#+LATEX_HEADER:~
+Org mode syntax to ensure that it is put in the proper \LaTeX{} preamble.
+
+\begin{verbatim}
+#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,\n#+LATEX_HEADER: $1\n)}}}
+\end{verbatim}
+
+Note: the \verb~\n~ before \verb~#+LATEX_HEADER:~ and after the parameter \verb~$1~
+are an \emph{attempt} to ensure that the command starts and ends with a new
+line, so that Org mode commands are recognized correctly.  This is not
+bulletproof: if you put a newline \emph{inside} the command, that may still
+foul things up.
+
+\section{Definition Macros}
+\label{sec-2}
+
+Using the \ref{sec-1-2} macro, we specify macros that use the \TeX{} and \LaTeX{}
+macros to define macros.  Once again, due to the use of an Emacs Lisp
+string, it is necessary to double any literal backslashes provided to
+these macros, as explained for the \ref{sec-1-1} macro.
+
+\subsection{def}
+\label{sec-2-1}
+
+The plain \TeX{} command, which allows you to (re)define anything that
+(MathJax's implementation of) \TeX{} can handle, including \LaTeX{}.  This
+flexibility comes at the price of no warnings when you attempt to
+define something new and it redefines something essential.  The first
+argument is the control sequence to define, which may begin with a
+backslash (escaped: \verb~\\~), but must not contain curly brackets
+(\verb~{...}~); the second argument is what it should expand to,
+automatically enclosed in curly brackets.
+
+\begin{verbatim}
+#+MACRO: def {{{preamble(\\def$1{$2})}}}
+\end{verbatim}
+
+\subsection{newcommand}
+\label{sec-2-2}
+
+The standard \LaTeX{} command for defining a macro, which \emph{must not}
+already exist.  The first argument is the command name, which is
+automatically enclosed in brackets.  The second argument is what it
+should expand to, which is also automatically enclosed in brackets.
+The third argument, if any, is inserted \emph{as is} between the first and
+second argument; this lets you give a parameter count, or a parameter
+count \emph{and} a default value for the first parameter, each in square
+brackets (\verb~[...]~).
+
+\begin{verbatim}
+#+MACRO: newcommand {{{preamble(\\newcommand{$1}$3{$2})}}}
+\end{verbatim}
+
+\subsection{renewcommand}
+\label{sec-2-3}
+
+The \LaTeX{} command for redefining an existing macro, which \emph{must}
+already exist.  The arguments are the same as for the \ref{sec-2-2}
+macro.
+
+\begin{verbatim}
+#+MACRO: renewcommand {{{preamble(\\renewcommand{$1}$3{$2})}}}
+\end{verbatim}
+
+\subsection{newenvironment}
+\label{sec-2-4}
+
+The \LaTeX{} command for defining a new environment, which \emph{must not}
+already exist.  The first, second, and third arguments are enclosed in
+curly brackets in that order.  The fourth argument, if any, is
+inserted (as is) between the first and second arguments, like the
+third argument for the \ref{sec-2-2} macro.
+
+\begin{verbatim}
+#+MACRO: newenvironment {{{preamble(\\newenvironment{$1}$4{$2}{$3})}}}
+\end{verbatim}
+
+\subsection{renewenvironment}
+\label{sec-2-5}
+
+The \LaTeX{} command for redefining an existing environment, which \emph{must}
+already exist.  The arguments are the same as for the \ref{sec-2-4}
+macro.
+
+\begin{verbatim}
+#+MACRO: renewenvironment {{{preamble(\\renewenvironment{$1}$4{$2}{$3})}}}
+\end{verbatim}
+
+\section{Installation}
+\label{sec-3}
+
+To use this setup file, you only need to "tangle" this document from
+within Emacs (press \verb~C-c C-v t~ in the default keymap), drop it into
+the same directory as your Org mode document(s), and load it with
+\begin{verbatim}
+#+SETUPFILE: define.setup
+\end{verbatim}
+near the beginning of each file.
+
+\section{Usage Examples}
+\label{sec-4}
+
+\subsection{{\bfseries\sffamily TODO} def}
+\label{sec-4-1}
+
+\subsection{newcommand (without parameters)}
+\label{sec-4-2}
+
+
+Say you are writing a book on Intermediate Algebra, and introducing
+the vertex form of quadratic equations.  And you find yourself
+referring to the equation \[\myvqeqn\] a lot, so you would like to
+abbreviate it.  Easy!  Anywhere (almost) \emph{before} your first usage ---
+we do it right before this text, to help keep it consistent with the
+example text and explanation here --- just type
+\begin{verbatim}
+{{{newcommand(\\myvqeqn,y = 2(x-1)^2+1)}}}
+\end{verbatim}
+and use it like so:
+\begin{verbatim}
+The equation $\myvqeqn$ shows ...
+\end{verbatim}
+It will look like "The equation $\myvqeqn$ shows \ldots{}", in both HTML
+and \LaTeX{}, the latter thanks to the use of \verb~#+LATEX_HEADER:~ in the
+\ref{sec-1-2} macro.
+
+\subsection{newcommand (with a parameter)}
+\label{sec-4-3}
+
+
+Say you are writing a book on Linear Algebra.  You will certainly be
+writing a lot about the names of certain matrices, and you will
+probably want to abbreviate the names of (at least) the most common
+matrices you talk about.  For two reasons, you will want to use a
+parameter for the matrix name:
+
+\begin{enumerate}
+\item you may be writing about several matrices, and it would be a waste
+of effort to write a separate command for each one;
+\item you want to ensure that your typographical treatment of the various
+matrices is consistent, even if you change your mind later.
+\end{enumerate}
+
+So, you might define a command like this:
+\begin{verbatim}
+{{{newcommand(\\mat,\\mathbf{#1},[1])}}}
+\end{verbatim}
+and use it like this:
+\begin{verbatim}
+The matrices $\mat{A}$ and $\mat{B}$ represent ...
+\end{verbatim}
+
+Now, the result looks like "The matrices $\mat{A}$ and $\mat{B}$
+represent \ldots{}", but if you want to change how it looks later, there is
+only one definition that needs to be changed.
+
+\subsection{{\bfseries\sffamily TODO} renewcommand}
+\label{sec-4-4}
+
+\subsection{{\bfseries\sffamily TODO} newenvironment}
+\label{sec-4-5}
+
+\subsection{{\bfseries\sffamily TODO} renewenvironment}
+\label{sec-4-6}
+% Emacs 24.5.1 (Org mode 8.2.10)
+\end{document}
