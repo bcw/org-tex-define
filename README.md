@@ -2,11 +2,17 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1. Usage</a></li>
-<li><a href="#sec-2">2. License</a></li>
+<li><a href="#sec-1">1. Org mode setup file to make (La)TeX definitions work</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Usage</a></li>
+<li><a href="#sec-1-2">1.2. License</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
+
+# Org mode setup file to make (La)TeX definitions work<a id="sec-1" name="sec-1"></a>
 
 This is an Org mode Literate Program, which is tangled (by pressing
 `C-c C-v t`, in the default keymap with the `.org` file loaded) to an
@@ -19,7 +25,7 @@ them).  It then uses this to define a `preamble` macro for inserting
 preamble code in HTML and LaTeX formats, and finally several macros
 for each definition command supported by both MathJax and (La)TeX.
 
-# Usage<a id="sec-1" name="sec-1"></a>
+## Usage<a id="sec-1-1" name="sec-1-1"></a>
 
 To use the setup file, you must copy the `define.setup` file (or a
 regenerated version of it, if you modify the SRC blocks in the `.org`
@@ -43,6 +49,6 @@ an Org mode macro parameter optional at the end than elsewhere.
 
 There are some usage examples at the end of the program itself.
 
-# License<a id="sec-2" name="sec-2"></a>
+## License<a id="sec-1-2" name="sec-1-2"></a>
 
 This program is licensed under the GNU GPLv3+.

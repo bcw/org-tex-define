@@ -1,8 +1,8 @@
-#+TITLE: Org mode setup file to make (La)TeX definitions work
+* Org mode setup file to make (La)TeX definitions work
 
 #+INCLUDE: blurb.org
 
-* Usage
+** Usage
 
 To use the setup file, you must copy the ~define.setup~ file (or a
 regenerated version of it, if you modify the SRC blocks in the ~.org~
@@ -28,6 +28,6 @@ an Org mode macro parameter optional at the end than elsewhere.
 
 There are some usage examples at the end of the program itself.
 
-* License
+** License
 
 This program is licensed under the GNU GPLv3+.
