@@ -1,0 +1,33 @@
+#+TITLE: Org mode setup file to make (La)TeX definitions work
+
+#+INCLUDE: blurb.org
+
+* Usage
+
+To use the setup file, you must copy the ~define.setup~ file (or a
+regenerated version of it, if you modify the SRC blocks in the ~.org~
+program file) somewhere Emacs can access, then put the following near
+the beginning of your own ~.org~ file:
+
+#+BEGIN_SRC org
+#+SETUPFILE: path/to/define.setup
+#+END_SRC
+
+After that, you can use the ~def~ or ~newcommand~ (and friends)
+macros, which are all named after the standard (La)TeX commands.  You
+do /not/ need to update a dynamic block, duplicate the definitions, or
+any other craziness, and the definitions will work /almost/ anywhere
+in a file.  (It will /not/ work if you try to define it after its
+first use, however.)
+
+All of the commands which can take optional parameters (that is, the
+LaTeX ~newcommand~ and friends) have the optional parameters /at the
+end/ of the command (instead of between the first and second mandatory
+parameters, as in LaTeX).  I did this because it's much easier to make
+an Org mode macro parameter optional at the end than elsewhere.
+
+There are some usage examples at the end of the program itself.
+
+* License
+
+This program is licensed under the GNU GPLv3+.
