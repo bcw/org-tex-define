@@ -9,15 +9,15 @@ only works properly if the `listings' package is NOT being used; see
 #+LATEX_HEADER: \RequirePackage{fancyvrb}
 #+LATEX_HEADER: \DefineVerbatimEnvironment{verbatim}{Verbatim}{fontsize=\scriptsize}
 
-This document should be exported to [[file:define.html][HTML]] and [[file:define.tex][LaTeX]] to check that the
-proper code is generated.  [[file:define.pdf][A PDF file]] should also be available, but
+This document should be exported to HTML and LaTeX to check that the
+proper code is generated.  A PDF file should also be available, but
 looks a bit bad because Org mode macros /must/ be written on a single
 line, and some of these macros overfill the line (even in a fairly
 small font).
 
 This Literate Program is an Org mode setup file that makes it easy to
 define LaTeX macros that work in /both/ LaTeX and HTML export.  To
-"tangle" the [[file:define.org][Org mode source code]] for this document to generate the
+"tangle" the Org mode source code for this document to generate the
 ~define.setup~ file, type the key sequence ~C-c C-v t~ in Emacs (with
 the default keymap).  The first line makes sure that the file can be
 edited in org-mode despite the file being named with an extension of
