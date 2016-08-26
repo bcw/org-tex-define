@@ -6,9 +6,9 @@
 {{{renewcommand(\\vec,\\mathbf{#1},[1])}}}
 {{{newcommand(\\e,\\mathbf{e}_{#1},[1])}}}
 
-This document is an extended example for using [[file:../define.org][this literate program]].
-It should be available in both HTML and PDF versions, as well as the
-Org mode source code.
+This document is an example for [[https://github.com/bcw/org-tex-define][this literate program on GitHub]]. It
+should be available on [[http://www.bcwells.net/][my website]] in both [[http://www.bcwells.net/articles/rotation.html][HTML]] and [[http://www.bcwells.net/articles/rotation.pdf][PDF]] versions, while
+the source code is in the ~examples/~ directory of the GitHub repo.
 
 * Introduction
 
