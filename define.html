@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Org mode LaTeX macros (for both HTML and LaTeX export)</title>
-<!-- 2016-08-25 Thu 19:26 -->
+<!-- 2016-08-25 Thu 20:25 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Brian C. Wells" />
@@ -214,6 +214,19 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <p>
+This is an Org mode Literare Program, which is tangled (by pressing
+<code>C-c C-v t</code>, in the default keymap with the <code>.org</code> file loaded) to an
+Org mode setup file named <code>define.setup</code>.  The program uses Org mode's
+builtin macros, which (apparently) have an undocumented feature of
+executing any Emacs Lisp code they contain (tested in Emacs 24.5.1,
+Org mode 8.2.9), to define a generic macro <code>when-fmt</code> for including
+code in only specified export formats (and any formats derived from
+them).  It then uses this to define a <code>preamble</code> macro for inserting
+preamble code in HTML and LaTeX formats, and finally several macros
+for each definition command supported by both MathJax and (La)TeX.
+</p>
+
+<p>
 This document should be exported to HTML and LaTeX to check that the
 proper code is generated.  A PDF file should also be available, but
 looks a bit bad because Org mode macros <i>must</i> be written on a single
@@ -222,13 +235,8 @@ small font).
 </p>
 
 <p>
-This Literate Program is an Org mode setup file that makes it easy to
-define LaTeX macros that work in <i>both</i> LaTeX and HTML export.  To
-"tangle" the Org mode source code for this document to generate the
-<code>define.setup</code> file, type the key sequence <code>C-c C-v t</code> in Emacs (with
-the default keymap).  The first line makes sure that the file can be
-edited in org-mode despite the file being named with an extension of
-<code>.setup</code>.
+The first line makes sure that the file can be edited in org-mode
+despite the file being named with an extension of <code>.setup</code>.
 </p>
 
 <div class="org-src-container">
@@ -535,7 +543,7 @@ only one definition that needs to be changed.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Brian C. Wells</p>
-<p class="date">Created: 2016-08-25 Thu 19:26</p>
+<p class="date">Created: 2016-08-25 Thu 20:25</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

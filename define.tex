@@ -1,4 +1,4 @@
-% Created 2016-08-25 Thu 19:27
+% Created 2016-08-25 Thu 20:25
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -32,19 +32,25 @@
 \maketitle
 \tableofcontents
 
+This is an Org mode Literare Program, which is tangled (by pressing
+\verb~C-c C-v t~, in the default keymap with the \verb~.org~ file loaded) to an
+Org mode setup file named \verb~define.setup~.  The program uses Org mode's
+builtin macros, which (apparently) have an undocumented feature of
+executing any Emacs Lisp code they contain (tested in Emacs 24.5.1,
+Org mode 8.2.9), to define a generic macro \verb~when-fmt~ for including
+code in only specified export formats (and any formats derived from
+them).  It then uses this to define a \verb~preamble~ macro for inserting
+preamble code in HTML and \LaTeX{} formats, and finally several macros
+for each definition command supported by both MathJax and (La)\TeX{}.
+
 This document should be exported to HTML and \LaTeX{} to check that the
 proper code is generated.  A PDF file should also be available, but
 looks a bit bad because Org mode macros \emph{must} be written on a single
 line, and some of these macros overfill the line (even in a fairly
 small font).
 
-This Literate Program is an Org mode setup file that makes it easy to
-define \LaTeX{} macros that work in \emph{both} \LaTeX{} and HTML export.  To
-"tangle" the Org mode source code for this document to generate the
-\verb~define.setup~ file, type the key sequence \verb~C-c C-v t~ in Emacs (with
-the default keymap).  The first line makes sure that the file can be
-edited in org-mode despite the file being named with an extension of
-\verb~.setup~.
+The first line makes sure that the file can be edited in org-mode
+despite the file being named with an extension of \verb~.setup~.
 
 \begin{verbatim}
 # -*- mode: org -*-
