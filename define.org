@@ -1,6 +1,5 @@
 #+TITLE: Org mode LaTeX macros (for both HTML and LaTeX export)
 #+SETUPFILE: define.setup
-#+OPTIONS: num:nil
 #+BEGIN_COMMENT
 These ~#+LATEX_HEADER:~ lines reduce the code font size so that it
 fits on the paper (although it still looks bad, unfortunately). BUT it
@@ -10,9 +9,6 @@ only works properly if the `listings' package is NOT being used; see
 #+LATEX_HEADER: \RequirePackage{fancyvrb}
 #+LATEX_HEADER: \DefineVerbatimEnvironment{verbatim}{Verbatim}{fontsize=\scriptsize}
 
-# for the usage example below
-{{{define(\\mat,[1]{\\mathbf{#1}})}}}
-
 This document should be exported to [[file:define.html][HTML]] and [[file:define.tex][LaTeX]] to check that the
 proper code is generated.  [[file:define.pdf][A PDF file]] should also be available, but
 looks a bit bad because Org mode macros /must/ be written on a single
@@ -21,23 +17,24 @@ small font).
 
 This Literate Program is an Org mode setup file that makes it easy to
 define LaTeX macros that work in /both/ LaTeX and HTML export.  To
-"tangle" the source code (~define.org~) for this document to generate
-the ~define.setup~ file, type the key sequence ~C-c C-v t~ in Emacs
-(with the default keymap).  The first line makes sure that the file
-can be edited in org-mode despite the file being named with an
-extension of ~.setup~.
+"tangle" the [[file:define.org][Org mode source code]] for this document to generate the
+~define.setup~ file, type the key sequence ~C-c C-v t~ in Emacs (with
+the default keymap).  The first line makes sure that the file can be
+edited in org-mode despite the file being named with an extension of
+~.setup~.
 
 #+BEGIN_SRC org :tangle define.setup :noweb yes
 # -*- mode: org -*-
-<<define macros>>
+<<preliminary macros>>
+<<definition macros>>
 #+END_SRC
 
-* Define the Org mode macros
+* Preliminary Macros
   :PROPERTIES:
-  :noweb-ref: define macros
-  :END:
+  :noweb-ref: preliminary macros
+  :END:      
 
-** when-fmt macro
+** when-fmt
 
 This is inspired by the ~if-latex-else~ macro under the `Advanced'
 heading here: <https://github.com/fniessen/org-macros>. Apparently,
@@ -54,48 +51,155 @@ behavior for all non-LaTeX or non-HTML formats.
 #+MACRO: when-fmt (eval (when (org-export-derived-backend-p org-export-current-backend '$1) "$2"))
 #+END_SRC
 
-Since the second parameter ~$2~ is used inside quotes, it will be
-necessary to double any backslashes, despite the fact that Org mode
+Since the parameter ~$2~ is inside quotes, it will be necessary to
+double any (literal) backslashes, despite the fact that Org mode
 macros do not normally require this (except between parameters).
 
-** preamble macro
+** preamble
 
-Using the [[when-fmt macro]], we wrap HTML output in ~\(...\)~ so that [[http://docs.mathjax.org/en/latest/tex.html#defining-tex-macros][the
+Using the [[when-fmt]] macro, we wrap HTML output in ~\(...\)~ so that [[http://docs.mathjax.org/en/latest/tex.html#defining-tex-macros][the
 MathJax library will recognize that it should process them]].  So long
 as we only use this to define LaTeX macros, MathJax will not generate
 any spurious output.  In LaTeX output, we use the ~#+LATEX_HEADER:~
 Org mode syntax to ensure that it is put in the proper LaTeX preamble.
 
 #+BEGIN_SRC org
-#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,#+LATEX_HEADER: $1)}}}
+#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,\n#+LATEX_HEADER: $1\n)}}}
 #+END_SRC
 
-** define macro
+Note: the ~\n~ before ~#+LATEX_HEADER:~ and after the parameter ~$1~
+are an /attempt/ to ensure that the command starts and ends with a new
+line, so that Org mode commands are recognized correctly.  This is not
+bulletproof: if you put a newline /inside/ the command, that may still
+foul things up.
 
-Using the [[preamble macro]], we specify a macro that uses the LaTeX
-~\newcommand~ macro to define macros.  The first argument is the macro
-command sequence, and the second argument is whatever LaTeX code is
-needed for the definition.  Note that we wrap the command sequence in
-~{...}~ automatically, since this is always done.  The second
-parameter is not, however, because it is sometimes necessary to write
-a number in square brackets ~[...]~ when the macro takes parameters.
+* Definition Macros
+  :PROPERTIES:
+  :noweb-ref: definition macros
+  :END:
+
+Using the [[preamble]] macro, we specify macros that use the TeX and LaTeX
+macros to define macros.  Once again, due to the use of an Emacs Lisp
+string, it is necessary to double any literal backslashes provided to
+these macros, as explained for the [[when-fmt]] macro.
+
+** def
+
+The plain TeX command, which allows you to (re)define anything that
+(MathJax's implementation of) TeX can handle, including LaTeX.  This
+flexibility comes at the price of no warnings when you attempt to
+define something new and it redefines something essential.  The first
+argument is the control sequence to define, which may begin with a
+backslash (escaped: ~\\~), but must not contain curly brackets
+(~{...}~); the second argument is what it should expand to,
+automatically enclosed in curly brackets.
 
 #+BEGIN_SRC org
-#+MACRO: define   {{{preamble(\\newcommand{$1}$2)}}}
+#+MACRO: def {{{preamble(\\def$1{$2})}}}
 #+END_SRC
 
-* Usage Example
+** newcommand
 
-Say you want to define a ~\mat~ command to write the names of
-matrices, as in ~\mat{A}~ for $\mat{A}$.
+The standard LaTeX command for defining a macro, which /must not/
+already exist.  The first argument is the command name, which is
+automatically enclosed in brackets.  The second argument is what it
+should expand to, which is also automatically enclosed in brackets.
+The third argument, if any, is inserted /as is/ between the first and
+second argument; this lets you give a parameter count, or a parameter
+count /and/ a default value for the first parameter, each in square
+brackets (~[...]~).
 
-At the beginning of the file, you should add
+#+BEGIN_SRC org
+#+MACRO: newcommand {{{preamble(\\newcommand{$1}$3{$2})}}}
+#+END_SRC
+
+** renewcommand
+
+The LaTeX command for redefining an existing macro, which /must/
+already exist.  The arguments are the same as for the [[newcommand]]
+macro.
+
+#+BEGIN_SRC org
+#+MACRO: renewcommand {{{preamble(\\renewcommand{$1}$3{$2})}}}
+#+END_SRC
+
+** newenvironment
+
+The LaTeX command for defining a new environment, which /must not/
+already exist.  The first, second, and third arguments are enclosed in
+curly brackets in that order.  The fourth argument, if any, is
+inserted (as is) between the first and second arguments, like the
+third argument for the [[newcommand]] macro.
+
+#+BEGIN_SRC org
+#+MACRO: newenvironment {{{preamble(\\newenvironment{$1}$4{$2}{$3})}}}
+#+END_SRC
+
+** renewenvironment
+
+The LaTeX command for redefining an existing environment, which /must/
+already exist.  The arguments are the same as for the [[newenvironment]]
+macro.
+
+#+BEGIN_SRC org
+#+MACRO: renewenvironment {{{preamble(\\renewenvironment{$1}$4{$2}{$3})}}}
+#+END_SRC
+
+* Installation
+
+To use this setup file, you only need to "tangle" this document from
+within Emacs (press ~C-c C-v t~ in the default keymap), drop it into
+the same directory as your Org mode document(s), and load it with
 : #+SETUPFILE: define.setup
-and then you can write
-: {{{define(\\mat,[1]{\\mathbf{#1}})}}}
-Again, remember: it is necessary to double the backslashes.  
+near the beginning of each file.
 
-After that is done, you can use the macro as follows:
-: $\mat{A}$
-Note that the backslash here is /not/ doubled, because this is LaTeX,
-not our Org mode macro.  The result looks like this: $\mat{A}$.
+* Usage Examples
+
+** TODO def
+
+** newcommand (without parameters)
+
+{{{newcommand(\\myvqeqn,y = 2(x-1)^2+1)}}}
+
+Say you are writing a book on Intermediate Algebra, and introducing
+the vertex form of quadratic equations.  And you find yourself
+referring to the equation \[\myvqeqn\] a lot, so you would like to
+abbreviate it.  Easy!  Anywhere (almost) /before/ your first usage ---
+we do it right before this text, to help keep it consistent with the
+example text and explanation here --- just type
+: {{{newcommand(\\myvqeqn,y = 2(x-1)^2+1)}}}
+and use it like so:
+: The equation $\myvqeqn$ shows ...
+It will look like "The equation $\myvqeqn$ shows ...", in both HTML
+and LaTeX, the latter thanks to the use of ~#+LATEX_HEADER:~ in the
+[[preamble]] macro.
+
+** newcommand (with a parameter)
+
+{{{newcommand(\\mat,\\mathbf{#1},[1])}}}
+
+Say you are writing a book on Linear Algebra.  You will certainly be
+writing a lot about the names of certain matrices, and you will
+probably want to abbreviate the names of (at least) the most common
+matrices you talk about.  For two reasons, you will want to use a
+parameter for the matrix name:
+
+1. you may be writing about several matrices, and it would be a waste
+   of effort to write a separate command for each one;
+2. you want to ensure that your typographical treatment of the various
+   matrices is consistent, even if you change your mind later.
+
+So, you might define a command like this:
+: {{{newcommand(\\mat,\\mathbf{#1},[1])}}}
+and use it like this:
+: The matrices $\mat{A}$ and $\mat{B}$ represent ...
+
+Now, the result looks like "The matrices $\mat{A}$ and $\mat{B}$
+represent ...", but if you want to change how it looks later, there is
+only one definition that needs to be changed.
+
+** TODO renewcommand
+
+** TODO newenvironment
+
+** TODO renewenvironment

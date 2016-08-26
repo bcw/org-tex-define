@@ -1,5 +1,9 @@
 
 # -*- mode: org -*-
 #+MACRO: when-fmt (eval (when (org-export-derived-backend-p org-export-current-backend '$1) "$2"))
-#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,#+LATEX_HEADER: $1)}}}
-#+MACRO: define   {{{preamble(\\newcommand{$1}$2)}}}
+#+MACRO: preamble {{{when-fmt(html,\\($1\\))}}}{{{when-fmt(latex,\n#+LATEX_HEADER: $1\n)}}}
+#+MACRO: def {{{preamble(\\def$1{$2})}}}
+#+MACRO: newcommand {{{preamble(\\newcommand{$1}$3{$2})}}}
+#+MACRO: renewcommand {{{preamble(\\renewcommand{$1}$3{$2})}}}
+#+MACRO: newenvironment {{{preamble(\\newenvironment{$1}$4{$2}{$3})}}}
+#+MACRO: renewenvironment {{{preamble(\\renewenvironment{$1}$4{$2}{$3})}}}
