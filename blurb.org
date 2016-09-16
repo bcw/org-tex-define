@@ -3,7 +3,7 @@ This is an Org mode Literate Program, which is tangled (by pressing
 Org mode setup file named ~define.setup~.  The program uses Org mode's
 builtin macros, which (apparently) have an undocumented feature of
 executing any Emacs Lisp code they contain (tested in Emacs 24.5.1,
-Org mode 8.2.9), to define a generic macro ~when-fmt~ for including
+Org mode 8.2.10), to define a generic macro ~when-fmt~ for including
 code in only specified export formats (and any formats derived from
 them).  It then uses this to define a ~preamble~ macro for inserting
 preamble code in HTML and LaTeX formats, and finally several macros
