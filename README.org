@@ -9,9 +9,7 @@ regenerated version of it, if you modify the SRC blocks in the ~.org~
 program file) somewhere Emacs can access, then put the following near
 the beginning of your own ~.org~ file:
 
-#+BEGIN_SRC org
-#+SETUPFILE: path/to/define.setup
-#+END_SRC
+: #+SETUPFILE: path/to/define.setup
 
 After that, you can use the ~def~ or ~newcommand~ (and friends)
 macros, which are all named after the standard (La)TeX commands.  You
